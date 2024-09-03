@@ -10,33 +10,60 @@
             background-color: #f9f9f9;
             margin: 0;
             padding: 0;
+            perspective: 1000px; /* Enables 3D space */
         }
         header {
             background-color: #ffcc00;
             color: #333;
             padding: 20px;
             text-align: center;
+            transform: rotateX(0deg); /* 3D effect */
+            animation: headerAnimation 2s ease-in-out forwards;
+        }
+        @keyframes headerAnimation {
+            0% {
+                transform: rotateX(-90deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+            }
         }
         .container {
             width: 80%;
             margin: auto;
             padding: 20px;
+            transform-style: preserve-3d; /* Preserve 3D space for children */
         }
         .wish-card {
             background: #fff;
             padding: 20px;
             margin: 20px 0;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             text-align: center;
+            transform: rotateY(0deg); /* 3D effect */
+            animation: cardAnimation 1s ease-in-out forwards;
+        }
+        @keyframes cardAnimation {
+            0% {
+                transform: rotateY(-90deg);
+            }
+            100% {
+                transform: rotateY(0deg);
+            }
         }
         .wish-card h2 {
             color: #ff6600;
+            transform: scale(1);
+            animation: textAnimation 1s ease-in-out forwards;
         }
-        .wish-card img {
-            max-width: 200px;
-            margin-top: 15px;
-            border-radius: 50%;
+        @keyframes textAnimation {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
         .wish-card button, .wish-card input[type="submit"] {
             background-color: #ff6600;
@@ -46,12 +73,12 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transform: translateZ(0); /* 3D effect */
+            transition: transform 0.2s; /* Smooth transition */
         }
         .wish-card button:hover, .wish-card input[type="submit"]:hover {
             background-color: #e65c00;
-        }
-        input[type="file"] {
-            display: none;
+            transform: translateZ(10px); /* 3D pop effect on hover */
         }
         .form-group {
             margin: 20px 0;
@@ -67,6 +94,20 @@
             border-radius: 5px;
             border: 1px solid #ccc;
             margin-bottom: 15px;
+        }
+        #shareMessage {
+            color: green;
+            display: none;
+            transform: translateZ(0);
+            animation: bounce 0.5s ease-in-out forwards;
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
     </style>
 </head>
@@ -84,15 +125,6 @@
                 <label for="recipientName">Enter the Recipient's Name:</label>
                 <input type="text" id="recipientName" placeholder="Enter name here" required>
             </div>
-
-            <div class="form-group">
-                <label for="photoUpload">Upload a Photo:</label>
-                <input type="file" id="photoUpload" accept="image/*" onchange="loadFile(event)">
-                <label for="photoUpload">
-                    <button type="button">Upload a Photo</button>
-                </label>
-            </div>
-
             <input type="submit" value="Generate Wish">
         </form>
     </div>
@@ -100,19 +132,15 @@
     <!-- Card to display the personalized birthday wish -->
     <div class="wish-card" id="wishDisplay" style="display:none;">
         <h2 id="birthdayMessage"></h2>
-        <img id="uploadedPhoto" src="" alt="Uploaded Photo" style="display:none;">
         <p>Hope your day is as special as you are!</p>
+
+        <!-- Share Button -->
+        <button id="shareButton">Share Wish</button>
+        <p id="shareMessage">Wish copied to clipboard!</p>
     </div>
 </div>
 
 <script>
-    // Function to handle image upload and display
-    function loadFile(event) {
-        var image = document.getElementById('uploadedPhoto');
-        image.src = URL.createObjectURL(event.target.files[0]);
-        image.style.display = 'block';
-    }
-
     // Function to generate the birthday wish
     document.getElementById('wishForm').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -124,8 +152,31 @@
         var message = "Happy Birthday, " + name + "! 🎉🎂🥳";
         document.getElementById('birthdayMessage').innerText = message;
 
-        // Display the wish card
-        document.getElementById('wishDisplay').style.display = 'block';
+        // Display the wish card with animation
+        var wishDisplay = document.getElementById('wishDisplay');
+        wishDisplay.style.display = 'block';
+        wishDisplay.style.animation = 'cardAnimation 1s ease-in-out forwards';
+    });
+
+    // Function to copy the wish to the clipboard and show a confirmation message
+    document.getElementById('shareButton').addEventListener('click', function() {
+        var wishText = document.getElementById('birthdayMessage').innerText + "\nHope your day is as special as you are!";
+        
+        // Create a temporary textarea element to copy the text
+        var tempTextArea = document.createElement('textarea');
+        tempTextArea.value = wishText;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+        
+        // Show the confirmation message with bounce animation
+        var shareMessage = document.getElementById('shareMessage');
+        shareMessage.style.display = 'block';
+        shareMessage.style.animation = 'bounce 0.5s ease-in-out forwards';
+        setTimeout(function() {
+            shareMessage.style.display = 'none';
+        }, 2000);
     });
 </script>
 
