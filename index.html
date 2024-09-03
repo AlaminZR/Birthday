@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Wishes</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #ffcc00;
+            color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .wish-card {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .wish-card h2 {
+            color: #ff6600;
+        }
+        .wish-card img {
+            max-width: 200px;
+            margin-top: 15px;
+            border-radius: 50%;
+        }
+        .wish-card button {
+            background-color: #ff6600;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .wish-card button:hover {
+            background-color: #e65c00;
+        }
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Happy Birthday Wishes</h1>
+</header>
+
+<div class="container">
+    <div class="wish-card">
+        <h2>Happy Birthday, [Name]!</h2>
+        <p>Wishing you a day filled with love, joy, and happiness!</p>
+        
+        <!-- Image upload section -->
+        <input type="file" id="photoUpload" accept="image/*" onchange="loadFile(event)">
+        <label for="photoUpload">
+            <button>Upload a Photo</button>
+        </label>
+        
+        <!-- Display uploaded photo -->
+        <img id="uploadedPhoto" src="" alt="Uploaded Photo" style="display:none;">
+        
+        <!-- Example wish text -->
+        <p>Hope your day is as special as you are!</p>
+    </div>
+</div>
+
+<script>
+    function loadFile(event) {
+        var image = document.getElementById('uploadedPhoto');
+        image.src = URL.createObjectURL(event.target.files[0]);
+        image.style.display = 'block';
+    };
+</script>
+
+</body>
+  </html>
+  
