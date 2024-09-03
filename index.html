@@ -38,7 +38,7 @@
             margin-top: 15px;
             border-radius: 50%;
         }
-        .wish-card button {
+        .wish-card button, .wish-card input[type="submit"] {
             background-color: #ff6600;
             color: white;
             padding: 10px 20px;
@@ -47,11 +47,26 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .wish-card button:hover {
+        .wish-card button:hover, .wish-card input[type="submit"]:hover {
             background-color: #e65c00;
         }
         input[type="file"] {
             display: none;
+        }
+        .form-group {
+            margin: 20px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -62,32 +77,57 @@
 </header>
 
 <div class="container">
+    <!-- Form to collect recipient's name -->
     <div class="wish-card">
-        <h2>Happy Birthday, [Name]!</h2>
-        <p>Wishing you a day filled with love, joy, and happiness!</p>
-        
-        <!-- Image upload section -->
-        <input type="file" id="photoUpload" accept="image/*" onchange="loadFile(event)">
-        <label for="photoUpload">
-            <button>Upload a Photo</button>
-        </label>
-        
-        <!-- Display uploaded photo -->
+        <form id="wishForm">
+            <div class="form-group">
+                <label for="recipientName">Enter the Recipient's Name:</label>
+                <input type="text" id="recipientName" placeholder="Enter name here" required>
+            </div>
+
+            <div class="form-group">
+                <label for="photoUpload">Upload a Photo:</label>
+                <input type="file" id="photoUpload" accept="image/*" onchange="loadFile(event)">
+                <label for="photoUpload">
+                    <button type="button">Upload a Photo</button>
+                </label>
+            </div>
+
+            <input type="submit" value="Generate Wish">
+        </form>
+    </div>
+
+    <!-- Card to display the personalized birthday wish -->
+    <div class="wish-card" id="wishDisplay" style="display:none;">
+        <h2 id="birthdayMessage"></h2>
         <img id="uploadedPhoto" src="" alt="Uploaded Photo" style="display:none;">
-        
-        <!-- Example wish text -->
         <p>Hope your day is as special as you are!</p>
     </div>
 </div>
 
 <script>
+    // Function to handle image upload and display
     function loadFile(event) {
         var image = document.getElementById('uploadedPhoto');
         image.src = URL.createObjectURL(event.target.files[0]);
         image.style.display = 'block';
-    };
+    }
+
+    // Function to generate the birthday wish
+    document.getElementById('wishForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Get the recipient's name
+        var name = document.getElementById('recipientName').value;
+        
+        // Create the personalized message
+        var message = "Happy Birthday, " + name + "! 🎉🎂🥳";
+        document.getElementById('birthdayMessage').innerText = message;
+
+        // Display the wish card
+        document.getElementById('wishDisplay').style.display = 'block';
+    });
 </script>
 
 </body>
-  </html>
-  
+</html>
